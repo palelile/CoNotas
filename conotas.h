@@ -23,6 +23,7 @@
 #include <QFileDialog>
 #include <QPrinter>
 #include <QPrintPreviewDialog>
+#include <QSettings>
 
 namespace Ui {
 class CoNotas;
@@ -98,6 +99,9 @@ private slots:
 	// Tareas asociadas a la pagina de administracion activa
 	void administracion_activa(int actual);
 	void pag_activa(int actual);
+    // Guardar las configuraciones del programa
+    void guardarOpciones();
+    void cargarOpciones();
 };
 
 #endif // CONOTAS_H

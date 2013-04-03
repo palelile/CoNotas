@@ -13,11 +13,13 @@ CoNotas::CoNotas(QWidget *parent) :
 	ui->toolBox->setCurrentIndex(1);
 	ui->toolBox->setCurrentIndex(0);
 	main_signals_slots();
+    cargarOpciones();
 
 }
 
 CoNotas::~CoNotas()
 {
+    guardarOpciones();
     delete ui;
 }
 
@@ -1052,4 +1054,23 @@ void CoNotas::inf_cargar_alumnos(QString letra)
 	modelo->setHeaderData(0, Qt::Horizontal, tr("alumno"));
 	modelo->setHeaderData(1, Qt::Horizontal, tr("rut"));
 	ui->inf_alumnos->setModel( modelo );
+}
+
+// Guarda las opciones del programa de forma permanente
+void CoNotas::guardarOpciones()
+{
+    QSettings opciones(QSettings::IniFormat, QSettings::UserScope, "Ashtaroth", "CoNotas");
+    opciones.beginGroup("Datos");
+    opciones.setValue("Escuela", ui->dat_escuela->text());
+    opciones.setValue("Comuna", ui->dat_comuna->text());
+    opciones.endGroup();
+}
+
+// Carga las opciones del programa
+void CoNotas::cargarOpciones(){
+    QSettings opciones(QSettings::IniFormat, QSettings::UserScope, "Ashtaroth", "CoNotas");
+    opciones.beginGroup("Datos");
+    ui->dat_escuela->setText( opciones.value("Escuela").toString() );
+    ui->dat_comuna->setText( opciones.value("Comuna").toString() );
+    opciones.endGroup();
 }
