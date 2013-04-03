@@ -1,0 +1,975 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>Eduardo Alcayaga</author>
+ <class>CoNotas</class>
+ <widget class="QMainWindow" name="CoNotas">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>CoNotas</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QToolBox" name="toolBox">
+      <property name="currentIndex">
+       <number>2</number>
+      </property>
+      <widget class="QWidget" name="pagina_Administracion">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>782</width>
+         <height>336</height>
+        </rect>
+       </property>
+       <attribute name="label">
+        <string>Administracion</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QTabWidget" name="tabWidget">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="tab_Personas">
+           <attribute name="title">
+            <string>Personas</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QGroupBox" name="grupos_datos_personas">
+              <property name="title">
+               <string>Agregar o modificar persona</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout">
+               <item>
+                <layout class="QHBoxLayout" name="personas_contenedor1">
+                 <item>
+                  <widget class="QLineEdit" name="rut">
+                   <property name="minimumSize">
+                    <size>
+                     <width>73</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maxLength">
+                    <number>8</number>
+                   </property>
+                   <property name="placeholderText">
+                    <string>RUT</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="digito">
+                   <property name="maxLength">
+                    <number>1</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_2">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>723</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="sexo">
+                   <item>
+                    <property name="text">
+                     <string>M</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>F</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>723</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="fecha_nacimiento_label">
+                   <property name="text">
+                    <string>Fecha de nacimiento:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>fecha_nacimiento</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QDateEdit" name="fecha_nacimiento">
+                   <property name="displayFormat">
+                    <string>dd-MMMM-yyyy</string>
+                   </property>
+                   <property name="calendarPopup">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="personas_contenedor2">
+                 <item>
+                  <widget class="QLineEdit" name="nombres">
+                   <property name="placeholderText">
+                    <string>Nombres</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="apellido_paterno">
+                   <property name="placeholderText">
+                    <string>Apellido paterno</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="apellido_materno">
+                   <property name="placeholderText">
+                    <string>Apellido materno</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QPushButton" name="boton_agregar_modificar">
+                 <property name="text">
+                  <string>Agregar o modificar</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTableView" name="tabla_personas">
+              <property name="sortingEnabled">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_Curso">
+           <attribute name="title">
+            <string>Cursos</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <item row="2" column="1">
+             <widget class="QGroupBox" name="groupBox_3">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="title">
+               <string>Agregar alumnos</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_7">
+               <item>
+                <layout class="QHBoxLayout" name="grupo_cursos_existentes">
+                 <item>
+                  <widget class="QComboBox" name="exis_anio"/>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="exis_tipo"/>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="exis_nivel"/>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="exis_letra"/>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_2">
+                 <item>
+                  <widget class="QLineEdit" name="rut_alumno">
+                   <property name="maximumSize">
+                    <size>
+                     <width>80</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="maxLength">
+                    <number>9</number>
+                   </property>
+                   <property name="placeholderText">
+                    <string>Rut alumno</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="boton_agregar_alumno">
+                   <property name="text">
+                    <string>Agregar</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="datos_alumno">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Datos del alumno</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                   <property name="buddy">
+                    <cstring>rut_alumno</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QTableView" name="tabla_alumnos"/>
+            </item>
+            <item row="0" column="0" colspan="2">
+             <widget class="QGroupBox" name="agregar_curso">
+              <property name="title">
+               <string>Agregar o modificar curso</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_3">
+               <item row="2" column="3">
+                <widget class="QSpinBox" name="nivel">
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>8</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="4">
+                <widget class="QComboBox" name="letra">
+                 <item>
+                  <property name="text">
+                   <string>A</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>B</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>C</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>D</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>E</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_2">
+                 <property name="text">
+                  <string>Año</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>anio</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLabel" name="label_3">
+                 <property name="text">
+                  <string>Tipo</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>tipo</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <widget class="QLabel" name="label_4">
+                 <property name="text">
+                  <string>Nivel</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>nivel</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="4">
+                <widget class="QLabel" name="label_5">
+                 <property name="text">
+                  <string>Letra</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>letra</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QComboBox" name="tipo">
+                 <item>
+                  <property name="text">
+                   <string>110</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="0" column="5">
+                <widget class="QLabel" name="label_6">
+                 <property name="text">
+                  <string>Rut Profesor</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>rut_profesor_jefe</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="5">
+                <widget class="QLineEdit" name="rut_profesor_jefe">
+                 <property name="maximumSize">
+                  <size>
+                   <width>85</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Rut docente</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QSpinBox" name="anio">
+                 <property name="minimum">
+                  <number>1900</number>
+                 </property>
+                 <property name="maximum">
+                  <number>9999</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="7">
+                <widget class="QLineEdit" name="descripcion">
+                 <property name="inputMethodHints">
+                  <set>Qt::ImhNone</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="7">
+                <widget class="QLabel" name="label">
+                 <property name="text">
+                  <string>Descripcion</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>descripcion</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="9">
+                <widget class="QPushButton" name="boton_agregar_curso">
+                 <property name="text">
+                  <string>Agregar o modificar</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="9">
+                <widget class="QLabel" name="datos_docente">
+                 <property name="text">
+                  <string>Datos docente</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="2">
+                <widget class="QSpinBox" name="plan">
+                 <property name="maximum">
+                  <number>9999</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QLabel" name="label_8">
+                 <property name="text">
+                  <string>Plan</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>plan</cstring>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_Asignaturas">
+           <attribute name="title">
+            <string>Asignaturas</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QGroupBox" name="groupBox_4">
+              <property name="title">
+               <string>Selecione curso</string>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_5">
+               <item>
+                <widget class="QComboBox" name="asig_anio">
+                 <property name="toolTip">
+                  <string extracomment="Año">Año</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="asig_tipo">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tipo de enseñanza:&lt;/p&gt;&lt;p&gt;10: Prebasica&lt;/p&gt;&lt;p&gt;110: Basica&lt;/p&gt;&lt;p&gt;310: Media humanista - cientifico&lt;/p&gt;&lt;p&gt;410: Media tecnico profesional&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="asig_nivel"/>
+               </item>
+               <item>
+                <widget class="QComboBox" name="asig_letra"/>
+               </item>
+               <item>
+                <spacer name="asig_spacer1">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>453</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLabel" name="datos_docente_asignatura">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <item>
+               <widget class="QComboBox" name="asig_asig">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="asig_rut">
+                <property name="maximumSize">
+                 <size>
+                  <width>80</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="asig_ponderable">
+                <property name="text">
+                 <string>Ponderable</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="asig_agregar">
+                <property name="text">
+                 <string>Agregar</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QTableView" name="tabla_asignaturas"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_Importar">
+           <attribute name="title">
+            <string>Importar</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_8">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <item>
+               <widget class="QLabel" name="label_12">
+                <property name="text">
+                 <string>Importar &quot;Nomina de alumnos&quot; exportada desde SIGE en formato TXT</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="importar_sige">
+                <property name="text">
+                 <string>Importar</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_Datos">
+           <attribute name="title">
+            <string>Datos generales</string>
+           </attribute>
+           <layout class="QFormLayout" name="formLayout">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_13">
+              <property name="text">
+               <string>Comuna</string>
+              </property>
+              <property name="buddy">
+               <cstring>dat_comuna</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="dat_comuna">
+              <property name="text">
+               <string>Vicuña</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_14">
+              <property name="text">
+               <string>Escuela</string>
+              </property>
+              <property name="buddy">
+               <cstring>dat_escuela</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="dat_escuela">
+              <property name="text">
+               <string>Escuela Jojojojo</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_Pruebas">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>782</width>
+         <height>336</height>
+        </rect>
+       </property>
+       <attribute name="label">
+        <string>Pruebas y notas</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <item>
+         <widget class="QGroupBox" name="groupBox_5">
+          <property name="title">
+           <string>Pruebas</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <item>
+              <widget class="QComboBox" name="prueb_anio">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="prueb_tipo">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="prueb_nivel"/>
+             </item>
+             <item>
+              <widget class="QComboBox" name="prueb_letra"/>
+             </item>
+             <item>
+              <widget class="QComboBox" name="prueb_asig">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QGridLayout" name="gridLayout_6">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_9">
+               <property name="text">
+                <string>Periodo</string>
+               </property>
+               <property name="buddy">
+                <cstring>prueb_periodo</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="label_10">
+               <property name="text">
+                <string>Coeficiente</string>
+               </property>
+               <property name="buddy">
+                <cstring>prueb_coeficiente</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QSpinBox" name="prueb_coeficiente">
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>3</number>
+               </property>
+               <property name="value">
+                <number>1</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QSpinBox" name="prueb_periodo">
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>5</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLabel" name="label_11">
+               <property name="text">
+                <string>Descripcion</string>
+               </property>
+               <property name="buddy">
+                <cstring>prueb_descripcion</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QLineEdit" name="prueb_descripcion"/>
+             </item>
+             <item row="2" column="3">
+              <widget class="QPushButton" name="prueb_agregar">
+               <property name="text">
+                <string>Agregar</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_6">
+          <property name="title">
+           <string>Notas</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <item>
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>Periodo:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="asig_periodo_filtro"/>
+             </item>
+             <item>
+              <widget class="QComboBox" name="asig_periodo_asig"/>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="prueb_guardar_notas">
+               <property name="text">
+                <string>Guardar notas</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QTableView" name="prueb_notas"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_Informes">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>782</width>
+         <height>485</height>
+        </rect>
+       </property>
+       <attribute name="label">
+        <string>Informes</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_9">
+        <item>
+         <layout class="QHBoxLayout" name="seleccion_curso">
+          <item>
+           <widget class="QComboBox" name="inf_anio"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="inf_tipo"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="inf_nivel"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="inf_letra"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="inf_periodo"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="seleccionar_informe">
+          <item>
+           <widget class="QComboBox" name="inf_alumnos">
+            <property name="sizeAdjustPolicy">
+             <enum>QComboBox::AdjustToContents</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="inf_cur_com">
+            <property name="text">
+             <string>Curso completo</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="bot_inf_parcial">
+            <property name="text">
+             <string>Parcial</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="bot_inf_semestral">
+            <property name="text">
+             <string>Semestral</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="bot_inf_anual">
+            <property name="text">
+             <string>Anual</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="sep_vert_01">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>rut</tabstop>
+  <tabstop>digito</tabstop>
+  <tabstop>sexo</tabstop>
+  <tabstop>fecha_nacimiento</tabstop>
+  <tabstop>nombres</tabstop>
+  <tabstop>apellido_paterno</tabstop>
+  <tabstop>apellido_materno</tabstop>
+  <tabstop>boton_agregar_modificar</tabstop>
+  <tabstop>tabla_personas</tabstop>
+  <tabstop>anio</tabstop>
+  <tabstop>tipo</tabstop>
+  <tabstop>plan</tabstop>
+  <tabstop>nivel</tabstop>
+  <tabstop>letra</tabstop>
+  <tabstop>rut_profesor_jefe</tabstop>
+  <tabstop>descripcion</tabstop>
+  <tabstop>boton_agregar_curso</tabstop>
+  <tabstop>exis_anio</tabstop>
+  <tabstop>exis_tipo</tabstop>
+  <tabstop>exis_nivel</tabstop>
+  <tabstop>exis_letra</tabstop>
+  <tabstop>rut_alumno</tabstop>
+  <tabstop>boton_agregar_alumno</tabstop>
+  <tabstop>tabla_alumnos</tabstop>
+  <tabstop>asig_anio</tabstop>
+  <tabstop>asig_tipo</tabstop>
+  <tabstop>asig_nivel</tabstop>
+  <tabstop>asig_letra</tabstop>
+  <tabstop>asig_asig</tabstop>
+  <tabstop>tabla_asignaturas</tabstop>
+  <tabstop>asig_rut</tabstop>
+  <tabstop>asig_ponderable</tabstop>
+  <tabstop>asig_agregar</tabstop>
+  <tabstop>importar_sige</tabstop>
+  <tabstop>prueb_anio</tabstop>
+  <tabstop>prueb_tipo</tabstop>
+  <tabstop>prueb_nivel</tabstop>
+  <tabstop>prueb_letra</tabstop>
+  <tabstop>prueb_asig</tabstop>
+  <tabstop>prueb_periodo</tabstop>
+  <tabstop>prueb_coeficiente</tabstop>
+  <tabstop>prueb_descripcion</tabstop>
+  <tabstop>prueb_agregar</tabstop>
+  <tabstop>asig_periodo_filtro</tabstop>
+  <tabstop>asig_periodo_asig</tabstop>
+  <tabstop>prueb_guardar_notas</tabstop>
+  <tabstop>prueb_notas</tabstop>
+  <tabstop>inf_anio</tabstop>
+  <tabstop>inf_tipo</tabstop>
+  <tabstop>inf_nivel</tabstop>
+  <tabstop>inf_letra</tabstop>
+  <tabstop>inf_periodo</tabstop>
+  <tabstop>inf_alumnos</tabstop>
+  <tabstop>inf_cur_com</tabstop>
+  <tabstop>bot_inf_parcial</tabstop>
+  <tabstop>bot_inf_semestral</tabstop>
+  <tabstop>bot_inf_anual</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
