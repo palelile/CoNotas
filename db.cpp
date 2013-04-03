@@ -361,7 +361,7 @@ bool db::agregar_asignatura(QString id_curso,
 {
     QSqlQuery consulta(*db_local);
     if ( id_asignatura(id_curso, id_codigo).compare("") != 0 )
-        return;
+        return false;
     else
         consulta.prepare("INSERT INTO asignaturas "
                          "(id_curso,rut_profesor,id_codigo,ponderable) "
