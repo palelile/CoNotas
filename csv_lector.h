@@ -7,6 +7,7 @@
 #include <QIODevice>
 #include <QString>
 #include <QStringList>
+#include <QByteArray>
 #include <QSqlTableModel>
 #include <QSqlRecord>
 #include "db.h"

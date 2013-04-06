@@ -31,7 +31,7 @@ bool csv_lector::leer_archivo_db(QString nombre_archivo, db *base_datos)
 		return false;
 	QTextStream linea(&file);
 
-	linea.setCodec(QTextCodec::codecForName("ISO-8859-15"));
+	linea.setCodec(QTextCodec::codecForName("ISO_8859-15"));
 	linea.readLine(); // Asumo que tiene cabecera
 	QString datos ="";
 	int i = 1;

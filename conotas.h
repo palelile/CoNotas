@@ -24,6 +24,7 @@
 #include <QPrinter>
 #include <QPrintPreviewDialog>
 #include <QSettings>
+#include <QDir>
 
 namespace Ui {
 class CoNotas;

@@ -5,6 +5,9 @@
 #include <QWidget>
 #include <QtGui>
 #include <QDomDocument>
+#include <QPrinter>
+#include <QPrintPreviewWidget>
+#include <QAction>
 
 
 enum BandType {

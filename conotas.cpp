@@ -392,11 +392,11 @@ void CoNotas::cur_curso_agregar()
  ******************************************************************************/
 void CoNotas::importar_Sige()
 {
-	QString archivo = QFileDialog::getOpenFileName(
-				this,
-				"Abrir archivo",
-				QDir::currentPath(),
-				"Archivo TXT de SIGE (*.txt)" );
+    QString archivo = QFileDialog::getOpenFileName(
+                this,
+                "Abrir archivo",
+                QDir::currentPath(),
+                "Archivo TXT de SIGE (*.txt)" );
 	if( archivo.isNull() )
 		ui->statusBar->showMessage("Archivo no seleccionado", 1000);
 	else

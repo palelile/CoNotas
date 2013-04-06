@@ -112,7 +112,7 @@ void QtRPT::drawField(QDomNode n, int bandTop, QPainter *painter) {
 
             if (e.attribute("picture","text") != "text") {
                 QByteArray byteArray;
-                byteArray = QByteArray::fromBase64(e.attribute("picture","text").toAscii());
+                byteArray = QByteArray::fromBase64(e.attribute("picture","text").toUtf8());
                 QPixmap pixmap = QPixmap::fromImage(QImage::fromData(byteArray, "PNG"));
                 painter->drawPixmap(left_,top_,width_,height_,pixmap);
             }
