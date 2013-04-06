@@ -4,9 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql xml
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core gui sql xml printsupport widgets
 
 TARGET = CoNotas
 TEMPLATE = app
@@ -30,12 +28,13 @@ FORMS    += conotas.ui
 OTHER_FILES += \
 		inf_parcial.xml
 
-CONFIG += static
+#Descomentar para compilar estaticamente
+#CONFIG += static
 
-static {
-	QMAKE_LFLAGS += -static-libgcc -static-libstdc++ -s -static
-	LFLAGS += -static-libgcc -static-libstdc++ -s -static
-	LDFLAGS += -static-libgcc -static-libstdc++
-	CONFIG += staticlib # Solo para las librerias
-	DEFINES += STATIC
-}
+#static {
+#        QMAKE_LFLAGS += -static-libgcc -static-libstdc++ -s -static
+#        LFLAGS += -static-libgcc -static-libstdc++ -s -static
+#        LDFLAGS += -static-libgcc -static-libstdc++
+#        CONFIG += staticlib # Solo para las librerias
+#        DEFINES += STATIC
+#}
