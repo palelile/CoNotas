@@ -25,15 +25,15 @@
     <item row="0" column="0">
      <widget class="QToolBox" name="toolBox">
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="pagina_Administracion">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>782</width>
-         <height>336</height>
+         <width>765</width>
+         <height>299</height>
         </rect>
        </property>
        <attribute name="label">
@@ -644,7 +644,7 @@
          <x>0</x>
          <y>0</y>
          <width>782</width>
-         <height>336</height>
+         <height>485</height>
         </rect>
        </property>
        <attribute name="label">
@@ -667,6 +667,12 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="toolTip">
+                <string>Año</string>
+               </property>
+               <property name="statusTip">
+                <string>Año</string>
+               </property>
               </widget>
              </item>
              <item>
@@ -677,13 +683,33 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="toolTip">
+                <string>Tipo de enseñanza</string>
+               </property>
+               <property name="statusTip">
+                <string>Tipo de enseñanza</string>
+               </property>
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="prueb_nivel"/>
+              <widget class="QComboBox" name="prueb_nivel">
+               <property name="toolTip">
+                <string>Nivel</string>
+               </property>
+               <property name="statusTip">
+                <string>Nivel</string>
+               </property>
+              </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="prueb_letra"/>
+              <widget class="QComboBox" name="prueb_letra">
+               <property name="toolTip">
+                <string>Letra</string>
+               </property>
+               <property name="statusTip">
+                <string>Letra</string>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QComboBox" name="prueb_asig">
@@ -692,6 +718,12 @@
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Asignatura</string>
+               </property>
+               <property name="statusTip">
+                <string>Asignatura</string>
                </property>
               </widget>
              </item>
@@ -786,7 +818,14 @@
               <widget class="QComboBox" name="asig_periodo_filtro"/>
              </item>
              <item>
-              <widget class="QComboBox" name="asig_periodo_asig"/>
+              <widget class="QComboBox" name="asig_periodo_asig">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
              </item>
              <item>
               <spacer name="horizontalSpacer_3">
@@ -811,7 +850,20 @@
             </layout>
            </item>
            <item>
-            <widget class="QTableView" name="prueb_notas"/>
+            <widget class="QTableView" name="prueb_notas">
+             <property name="editTriggers">
+              <set>QAbstractItemView::AllEditTriggers</set>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="selectionMode">
+              <enum>QAbstractItemView::SingleSelection</enum>
+             </property>
+             <property name="gridStyle">
+              <enum>Qt::DashLine</enum>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -824,7 +876,7 @@
          <x>0</x>
          <y>0</y>
          <width>782</width>
-         <height>485</height>
+         <height>145</height>
         </rect>
        </property>
        <attribute name="label">
@@ -832,21 +884,56 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_9">
         <item>
-         <layout class="QHBoxLayout" name="seleccion_curso">
-          <item>
-           <widget class="QComboBox" name="inf_anio"/>
-          </item>
-          <item>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="1" column="1">
            <widget class="QComboBox" name="inf_tipo"/>
           </item>
-          <item>
-           <widget class="QComboBox" name="inf_nivel"/>
+          <item row="1" column="4">
+           <widget class="QComboBox" name="inf_periodo"/>
           </item>
-          <item>
+          <item row="1" column="0">
+           <widget class="QComboBox" name="inf_anio"/>
+          </item>
+          <item row="1" column="3">
            <widget class="QComboBox" name="inf_letra"/>
           </item>
-          <item>
-           <widget class="QComboBox" name="inf_periodo"/>
+          <item row="1" column="2">
+           <widget class="QComboBox" name="inf_nivel"/>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_15">
+            <property name="text">
+             <string>Año</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>Tipo</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_17">
+            <property name="text">
+             <string>Nivel</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLabel" name="label_18">
+            <property name="text">
+             <string>Letra</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <widget class="QLabel" name="label_19">
+            <property name="text">
+             <string>Periodo</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>

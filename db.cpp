@@ -234,16 +234,20 @@ bool db::alumno_agregar(QString rut,
 {
 	QSqlQuery consulta(*db_local);
 	if ( alumo_en_curso(rut, curso) )
-		consulta.prepare("UPDATE alumno_en_curso "
-						 "SET vigente=1 "
-						 "WHERE rut_alumno=:rut AND id_curso=:curso");
-	else
-		consulta.prepare("INSERT INTO alumno_en_curso "
-						 "(rut_alumno, id_curso, vigente) "
-						 "VALUES (:rut, :curso, 1)");
-	consulta.bindValue(":rut", rut);
-	consulta.bindValue(":curso", curso);
-	return consulta.exec();
+        return false;
+    consulta.prepare("INSERT INTO alumno_en_curso "
+                     "(rut_alumno, id_curso, vigente) "
+                     "VALUES (:rut, :curso, 1)");
+    consulta.bindValue(":rut", rut);
+    consulta.bindValue(":curso", curso);
+    if (!consulta.exec())
+        return false;
+    consulta.clear();
+    consulta.prepare("INSERT INTO notas (id_prueba,rut_alumno,nota) "
+                     "SELECT id_prueba,'" + rut +"','0' FROM pruebas WHERE id_asignatura IN "
+                     "(SELECT id_asignatura FROM asignaturas WHERE id_curso=:curso)");
+    consulta.bindValue(":curso", curso);
+    return consulta.exec();
 }
 
 bool db::personas_agregar_muchas(QString datos)

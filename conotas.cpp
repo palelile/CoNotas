@@ -10,9 +10,12 @@ CoNotas::CoNotas(QWidget *parent) :
     ui->setupUi(this);
 	con_val_rut();	// Validadores de RUT
 	ini_cam_libres();
-	ui->toolBox->setCurrentIndex(1);
-	ui->toolBox->setCurrentIndex(0);
+
 	main_signals_slots();
+    ui->toolBox->setCurrentIndex(0);
+    ui->toolBox->setCurrentIndex(1);
+    ui->tabWidget->setCurrentIndex(1);
+    ui->tabWidget->setCurrentIndex(0);
     cargarOpciones();
 
 }
@@ -696,6 +699,9 @@ void CoNotas::prueb_poblar_notas()
 	modelo->setHeaderData(3, Qt::Horizontal, tr("Nota"));
 	modelo->select();
 	ui->prueb_notas->setModel( modelo );
+    ui->prueb_notas->hideColumn(0);
+    ui->prueb_notas->hideColumn(1);
+    ui->prueb_notas->resizeColumnsToContents();
 }
 
 
