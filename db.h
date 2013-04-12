@@ -24,7 +24,7 @@ public:
     int estado();
 
     // Función generica de agregado de datos
-    bool agregar(QString tabla, QStringList campos, QStringList valores);
+    bool agregar(QString tabla, QString campos, QString valores);
 
     // Modelo asociado a base de datos
     QSqlRelationalTableModel * modelo(QObject *parent);

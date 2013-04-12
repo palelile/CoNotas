@@ -14,6 +14,16 @@ bool db::conectar_db()
 }
 
 
+bool db::agregar(QString tabla, QString campos, QString valores)
+{
+    QSqlQuery consulta(*db_local);
+    consulta.prepare("INSERT INTO " + tabla +
+                     "(" + campos + ") "
+                     "VALUES (" + valores + ")");
+    return consulta.exec();
+}
+
+
 QSqlRelationalTableModel *db::modelo(QObject *parent)
 {
     return new QSqlRelationalTableModel(parent, *db_local);
