@@ -25,6 +25,8 @@
 #include <QPrintPreviewDialog>
 #include <QSettings>
 #include <QDir>
+#include <QDoubleValidator>
+#include <QPoint>
 
 namespace Ui {
 class CoNotas;
@@ -48,6 +50,7 @@ private:
 	// Manejo de personas
 	void adm_per_tab_vin();
 	void construir_linea_personas();
+    bool eventFilter(QObject *object, QEvent *event);
 	// Variables de administración de personas
 
 

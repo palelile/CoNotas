@@ -13,6 +13,19 @@ bool db::conectar_db()
 	return db_local->open();
 }
 
+
+QSqlRelationalTableModel *db::modelo(QObject *parent)
+{
+    return new QSqlRelationalTableModel(parent, *db_local);
+}
+
+QSqlQueryModel * db::modeloConsulta(QObject *parent, QString consulta)
+{
+    QSqlQueryModel * modelo = new QSqlQueryModel(parent);
+    modelo->setQuery(consulta, *db_local);
+    return modelo;
+}
+
 bool db::persona_agregar(QString rut,
 						 QString nombre,
 						 QString apellido_paterno,

@@ -205,7 +205,7 @@ void CoNotas::adm_per_tab_vin()
 {
 	if ( ui->tabla_personas->model() != NULL )
 		return;
-	QSqlRelationalTableModel * modelo = new QSqlRelationalTableModel(this, *mi_db->db_local);
+    QSqlRelationalTableModel * modelo = mi_db->modelo(this);
 	modelo->setTable("personas");
 	modelo->setRelation(4, QSqlRelation("sexos", "id_sexo", "descripcion"));
 	modelo->setEditStrategy(QSqlTableModel::OnFieldChange);
@@ -320,7 +320,7 @@ void CoNotas::cur_alumnos_cargar()
 						   );
 
 	QString filtro = "id_curso='" + curso_id + "'";
-	QSqlRelationalTableModel * modelo = new QSqlRelationalTableModel(this, *mi_db->db_local);
+    QSqlRelationalTableModel * modelo = mi_db->modelo(this);
 	modelo->setTable("alumno_en_curso");
 	modelo->setRelation(1, QSqlRelation("personas", "rut", "nombre||' '||apellido_paterno||' '||apellido_materno AS alumno"));
 	modelo->setFilter(filtro);
@@ -472,7 +472,6 @@ void CoNotas::asig_cargar_disponibles()
 				ui->asig_nivel->currentText(),
 				ui->asig_letra->currentText()
 				);
-	QSqlQueryModel * modelo = new QSqlQueryModel(this);
 	QString consulta = "SELECT codigos_asignaturas.subsector,codigos_asignaturas.id "
 					   "FROM decretos,codigos_asignaturas "
 					   "WHERE codigos_asignaturas.id_decreto=decretos.id "
@@ -480,7 +479,7 @@ void CoNotas::asig_cargar_disponibles()
 					   "AND decretos.nivel='" + ui->asig_nivel->currentText() +
 					   "' AND codigos_asignaturas.id NOT IN "
 					   "(SELECT id_codigo FROM asignaturas WHERE id_curso='" + curso_id + "');";
-	modelo->setQuery(consulta, *mi_db->db_local);
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
 	modelo->setHeaderData(0, Qt::Horizontal, tr("ID"));
 	modelo->setHeaderData(1, Qt::Horizontal, tr("SubSector"));
 	ui->asig_asig->setModel( modelo );
@@ -499,8 +498,7 @@ void CoNotas::asig_poblar_tabla(QString letra)
 				);
 
 	QString filtro = "id_curso='" + curso_id + "'";
-	QSqlRelationalTableModel * modelo = new QSqlRelationalTableModel(this,
-																	 *mi_db->db_local);
+    QSqlRelationalTableModel * modelo = mi_db->modelo(this);
 	modelo->setTable("asignaturas");
 	modelo->setRelation(2, QSqlRelation("personas",
 										"rut",
@@ -616,12 +614,11 @@ void CoNotas::prueb_asig_vincular_disponibles()
 				ui->prueb_nivel->currentText(),
 				ui->prueb_letra->currentText()
 				);
-	QSqlQueryModel * modelo = new QSqlQueryModel(this);
 	QString consulta = "SELECT codigos_asignaturas.subsector,asignaturas.id_asignatura "
 					   "FROM asignaturas,codigos_asignaturas "
 					   "WHERE codigos_asignaturas.id=asignaturas.id_codigo "
 					   "AND asignaturas.id_curso='" + curso_id + "';";
-	modelo->setQuery(consulta, *mi_db->db_local);
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
 	modelo->setHeaderData(0, Qt::Horizontal, tr("SubSector"));
 	modelo->setHeaderData(1, Qt::Horizontal, tr("ID"));
 	ui->prueb_asig->setModel( modelo );
@@ -635,13 +632,12 @@ void CoNotas::asig_per_vincular_disponibles()
 
 	QSqlQueryModel * modelo_asignatura = ( (QSqlQueryModel * )(ui->prueb_asig->model()) );
 	QString asig_id = modelo_asignatura->record(ui->prueb_asig->currentIndex()).value(1).toString();
-	QSqlQueryModel * modelo = new QSqlQueryModel(this);
-	QString consulta = "SELECT periodo "
+    QString consulta = "SELECT periodo "
 					   "FROM pruebas "
 					   "WHERE id_asignatura=" + asig_id +
 					   " GROUP BY periodo "
 					   "ORDER BY periodo";
-	modelo->setQuery(consulta, *mi_db->db_local);
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
 	modelo->setHeaderData(0, Qt::Horizontal, tr("Periodo"));
 	ui->asig_periodo_filtro->setModel( modelo );
 }
@@ -668,13 +664,13 @@ void CoNotas::prueb_cargar_de_periodo()
 {
 	QSqlQueryModel * mod_asig = ( (QSqlQueryModel * )(ui->prueb_asig->model()) );
 	QString asig_id = mod_asig->record(ui->prueb_asig->currentIndex()).value(1).toString();
-	QSqlQueryModel * modelo = new QSqlQueryModel(this);
+
 	QString consulta = "SELECT descripcion,id_prueba "
 					   "FROM pruebas "
 					   "WHERE id_asignatura=" + asig_id +
 					   " AND periodo=" + ui->asig_periodo_filtro->currentText() +
 					   " ORDER BY id_prueba";
-	modelo->setQuery(consulta, *mi_db->db_local);
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
 	modelo->setHeaderData(0, Qt::Horizontal, tr("prueba"));
 	modelo->setHeaderData(1, Qt::Horizontal, tr("id"));
 	ui->asig_periodo_asig->setModel( modelo );
@@ -688,7 +684,7 @@ void CoNotas::prueb_poblar_notas()
 
 	QSqlQueryModel * mod_pru = ( (QSqlQueryModel * )(ui->asig_periodo_asig->model()) );
 	QString prueba_id = mod_pru->record(ui->asig_periodo_asig->currentIndex()).value(1).toString();
-	QSqlRelationalTableModel * modelo = new QSqlRelationalTableModel(this, *mi_db->db_local);
+    QSqlRelationalTableModel * modelo = mi_db->modelo(this);
 	modelo->setTable("notas");
 	modelo->setFilter("id_prueba='" + prueba_id + "'");
 	modelo->setRelation(2, QSqlRelation("personas", "rut", "nombre"));
@@ -699,9 +695,33 @@ void CoNotas::prueb_poblar_notas()
 	modelo->setHeaderData(3, Qt::Horizontal, tr("Nota"));
 	modelo->select();
 	ui->prueb_notas->setModel( modelo );
-    ui->prueb_notas->hideColumn(0);
-    ui->prueb_notas->hideColumn(1);
+//    ui->prueb_notas->hideColumn(0);
+//    ui->prueb_notas->hideColumn(1);
     ui->prueb_notas->resizeColumnsToContents();
+    ui->prueb_notas->installEventFilter( this );
+}
+
+bool CoNotas::eventFilter(QObject *object, QEvent *event)
+{
+    if (object == ui->prueb_notas && event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Tab)
+        {
+            QModelIndex index = ui->prueb_notas->selectionModel()->currentIndex();
+            if (!index.isValid())
+                return false;
+            QModelIndex ind = ui->prueb_notas->model()->index(
+                        index.row()+1, index.column() );
+            ui->prueb_notas->selectionModel()->setCurrentIndex(
+                        ind,
+                        QItemSelectionModel::SelectCurrent);
+            ui->prueb_notas->edit(ind);
+            return true;
+        }
+        else
+            return false;
+    }
+    return false;
 }
 
 
@@ -1051,12 +1071,12 @@ void CoNotas::inf_cargar_alumnos(QString letra)
 				ui->inf_nivel->currentText(),
 				letra
 				);
-	QSqlQueryModel * modelo = new QSqlQueryModel(this);
+
 	QString consulta = "SELECT nombre||' '||apellido_paterno||' '||apellido_materno AS alumno,rut "
 					   "FROM personas,alumno_en_curso "
 					   "WHERE id_curso='" + curso_id +
 					   "' AND personas.rut=alumno_en_curso.rut_alumno";
-	modelo->setQuery(consulta, *mi_db->db_local);
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
 	modelo->setHeaderData(0, Qt::Horizontal, tr("alumno"));
 	modelo->setHeaderData(1, Qt::Horizontal, tr("rut"));
 	ui->inf_alumnos->setModel( modelo );
