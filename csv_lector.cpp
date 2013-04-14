@@ -23,7 +23,7 @@ bool csv_lector::leer_archivo_modelo(QString nombre_archivo)
 	return true;
 }
 
-bool csv_lector::leer_archivo_db(QString nombre_archivo, db *base_datos)
+bool csv_lector::leer_archivo_db(QString nombre_archivo, dbColegio *base_datos)
 {
 	mi_db = base_datos;
 	QFile file(nombre_archivo);

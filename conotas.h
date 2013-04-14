@@ -16,7 +16,7 @@
 #include <QSqlRelationalDelegate>
 #include <QAbstractItemModel>
 #include <QSqlRelation>
-#include "db.h"
+#include "dbcolegio.h"
 #include "rut.h"
 #include "csv_lector.h"
 #include "qtrpt.h"
@@ -42,7 +42,7 @@ public:
     
 private:
     Ui::CoNotas *ui;
-	db * mi_db;
+    dbColegio * mi_db;
 	void main_signals_slots();
 	void con_val_rut();
 	float promedio(QStringList lista);

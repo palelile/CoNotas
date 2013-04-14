@@ -180,6 +180,27 @@ void QtRPT::printExec(QPrinter *printer) {
 #endif
 }
 
+void QtRPT::printExec() {
+#ifndef QT_NO_PRINTER
+    QPrinter printer(QPrinter::HighResolution);
+    QDomElement docElem = xmlDoc->documentElement();
+    ph = docElem.attribute("pageHeight").toInt();
+    pw = docElem.attribute("pageWidth").toInt();
+    ml = docElem.attribute("marginsLeft").toInt();
+    mr = docElem.attribute("marginsRight").toInt();
+    mt = docElem.attribute("marginsTop").toInt();
+    mb = docElem.attribute("marginsBottom").toInt();
+    printer.setPageMargins(ml/4+0.01, mt/4+0.01, mr/4+0.01, mb/4+0.01, QPrinter::Millimeter);
+    QPrintPreviewDialog preview(&printer, this, Qt::Window);
+    preview.setWindowState(Qt::WindowMaximized);
+    connect(&preview, SIGNAL(paintRequested(QPrinter*)), SLOT(printPreview(QPrinter*)));
+    pr = preview.findChild<QPrintPreviewWidget *>();
+    lst = preview.findChildren<QAction *>();
+    pr->installEventFilter(this);
+    preview.exec();
+#endif
+}
+
 void QtRPT::printPreview(QPrinter *printer) {
 #ifdef QT_NO_PRINTER
     Q_UNUSED(printer);
@@ -190,7 +211,7 @@ void QtRPT::printPreview(QPrinter *printer) {
     //painter.drawRect(0,0,r.width(),r.height());   Рамка вокруг страницы
 
     int y = 0;
-    int yS = 0;
+//    int yS = 0;
     int yF = 0;
 
     //QDomElement docElem = xmlDoc->documentElement();  //get root element
@@ -204,7 +225,7 @@ void QtRPT::printPreview(QPrinter *printer) {
 
     if (!reportSummary.isNull()) {
         QDomElement e = reportSummary.toElement();
-        yS = e.attribute("height").toInt();
+//        yS = e.attribute("height").toInt();
     }
     if (!pageFooter.isNull()) {
         QDomElement e = pageFooter.toElement();

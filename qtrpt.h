@@ -5,9 +5,6 @@
 #include <QWidget>
 #include <QtGui>
 #include <QDomDocument>
-#include <QPrinter>
-#include <QPrintPreviewWidget>
-#include <QAction>
 
 
 enum BandType {
@@ -26,6 +23,7 @@ public:
     explicit QtRPT(QWidget *parent = 0);
     bool loadReport(QString fileName);
 	void printExec(QPrinter * printer);
+    void printExec();
     //void setCallbackFunc(void (*func)(int &recNo, QString &paramName, QVariant &paramValue));
 
 private:

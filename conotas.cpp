@@ -6,7 +6,8 @@ CoNotas::CoNotas(QWidget *parent) :
     ui(new Ui::CoNotas)
 {
 	QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf-8"));
-	mi_db = new db();
+    mi_db = new dbColegio();
+    mi_db->conectar("colegio.db");
     ui->setupUi(this);
 	con_val_rut();	// Validadores de RUT
 	ini_cam_libres();
@@ -227,21 +228,23 @@ void CoNotas::adm_per_tab_vin()
 void CoNotas::adm_per_agr_mod()
 {
 	if ( !rut::validar( ui->rut->text(), ui->digito->text() ) )
-		return;
-	if ( mi_db->persona_buscar( ui->rut->text() ))
-		mi_db->persona_modificar(ui->rut->text(),
-								 ui->nombres->text(),
-								 ui->apellido_paterno->text(),
-								 ui->apellido_materno->text(),
-								 ui->sexo->currentText(),
-								 ui->fecha_nacimiento->date());
-	else
-		mi_db->persona_agregar(ui->rut->text(),
-							   ui->nombres->text(),
-							   ui->apellido_paterno->text(),
-							   ui->apellido_materno->text(),
-							   ui->sexo->currentText(),
-							   ui->fecha_nacimiento->date());
+        return;
+    QString valores = "'" + ui->rut->text() + "','" +
+            ui->nombres->text() + "','" +
+            ui->apellido_paterno->text() + "','" +
+            ui->apellido_materno->text() + "','" +
+            ui->sexo->currentText() + "','" +
+            ui->fecha_nacimiento->date().toString("yyyy-MM-dd") + "'";
+//	if ( mi_db->persona_buscar( ui->rut->text() ))
+    if ( mi_db->buscar( "rut", "personas", "rut=" + ui->rut->text() ))
+        mi_db->modificar("personas",
+                         "rut=" + ui->rut->text(),
+                         "rut,nombre,apellido_paterno,apellido_materno,sexo,fecha_nacimiento",
+                         valores);
+    else
+        mi_db->agregar("personas",
+                       "rut,nombre,apellido_paterno,apellido_materno,sexo,fecha_nacimiento",
+                       valores);
 	((QSqlRelationalTableModel *)ui->tabla_personas->model())->select();
 }
 
@@ -259,9 +262,11 @@ void CoNotas::adm_per_agr_mod()
  ******************************************************************************/
 void CoNotas::rut_mod_profesor_jefe()
 {
-	ui->datos_docente->setText(
-				mi_db->persona_nombrar(
-					ui->rut_profesor_jefe->text()));
+    QStringList * persona = mi_db->buscar("nombre||' '||apellido_paterno||' '||apellido_materno AS persona",
+                                          "personas",
+                                          "rut='" + ui->rut_profesor_jefe->text() + "'");
+    if (persona)
+        ui->datos_docente->setText( persona->at(0) );
 }
 
 /*******************************************************************************
@@ -269,9 +274,9 @@ void CoNotas::rut_mod_profesor_jefe()
  ******************************************************************************/
 void CoNotas::cur_anios_cargar()
 {
-	ui->exis_anio->clear();
-	QStringList anios = mi_db->cursos_anios();
-	ui->exis_anio->addItems( anios );
+    QString consulta = "SELECT anio FROM cursos GROUP BY anio";
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
+    ui->exis_anio->setModel( modelo );
 }
 
 /*******************************************************************************
@@ -279,9 +284,11 @@ void CoNotas::cur_anios_cargar()
  ******************************************************************************/
 void CoNotas::cur_tipos_cargar()
 {
-	ui->exis_tipo->clear();
-	QStringList tipos = mi_db->cursos_tipos(ui->exis_anio->currentText());
-	ui->exis_tipo->addItems( tipos );
+    QString consulta = "SELECT tipo FROM cursos "
+            "WHERE anio=" + ui->exis_anio->currentText() +
+            " GROUP BY tipo";
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
+    ui->exis_tipo->setModel( modelo );
 }
 
 /*******************************************************************************
@@ -289,10 +296,12 @@ void CoNotas::cur_tipos_cargar()
  ******************************************************************************/
 void CoNotas::cur_niveles_cargar()
 {
-	ui->exis_nivel->clear();
-	QStringList niveles = mi_db->cursos_nivel( ui->exis_anio->currentText(),
-											   ui->exis_tipo->currentText());
-	ui->exis_nivel->addItems( niveles );
+    QString consulta = "SELECT nivel FROM cursos "
+            " WHERE anio='" + ui->exis_anio->currentText() +
+            "' AND tipo='" + ui->exis_tipo->currentText() +
+            "' GROUP BY nivel ORDER BY nivel";
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
+    ui->exis_nivel->setModel( modelo );
 }
 
 /*******************************************************************************
@@ -300,11 +309,13 @@ void CoNotas::cur_niveles_cargar()
  ******************************************************************************/
 void CoNotas::cur_letras_cargar()
 {
-	ui->exis_letra->clear();
-	QStringList letras = mi_db->cursos_letras( ui->exis_anio->currentText(),
-											   ui->exis_tipo->currentText(),
-											   ui->exis_nivel->currentText());
-	ui->exis_letra->addItems( letras );
+    QString consulta = "SELECT letra FROM cursos "
+            "WHERE anio='" + ui->exis_anio->currentText() +
+            "' AND tipo='" + ui->exis_tipo->currentText() +
+            "' AND nivel='" + ui->exis_nivel->currentText() +
+            "' GROUP BY letra ORDER BY letra";
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
+    ui->exis_letra->setModel( modelo );
 }
 
 /*******************************************************************************
@@ -342,9 +353,11 @@ void CoNotas::cur_alumnos_cargar()
  ******************************************************************************/
 void CoNotas::cur_rut_alumno()
 {
-	ui->datos_alumno->setText( mi_db->persona_nombrar(
-								   ui->rut_alumno->text())
-							   );
+    QStringList * persona = mi_db->buscar("nombre||' '||apellido_paterno||' '||apellido_materno AS persona",
+                                          "personas",
+                                          "rut='" + ui->rut_alumno->text() + "'");
+    if (persona)
+        ui->datos_alumno->setText( persona->at(0) );
 }
 
 /*******************************************************************************
@@ -368,15 +381,26 @@ void CoNotas::cur_alumno_agregar()
  ******************************************************************************/
 void CoNotas::cur_curso_agregar()
 {
-	mi_db->cursos_agregar(
-				QString::number(ui->anio->value()),
-				ui->tipo->currentText(),
-				QString::number(ui->nivel->value()),
-				ui->letra->currentText(),
-				ui->rut_profesor_jefe->text(),
-				QString::number(ui->plan->value()),
-				ui->descripcion->text()
-				);
+    QString id_curso = mi_db->cursos_id(QString::number(ui->anio->value()),
+                                        ui->tipo->currentText(),
+                                        QString::number(ui->nivel->value()),
+                                        ui->letra->currentText());
+    QString valores = "'" + id_curso + "','" +
+            QString::number(ui->anio->value()) + "','" +
+            ui->tipo->currentText() + "','" +
+            QString::number(ui->nivel->value()) + "','" +
+            ui->letra->currentText() + "','" +
+            ui->rut_profesor_jefe->text() + "','" +
+            QString::number(ui->plan->value()) + "','" +
+            ui->descripcion->text() + "'";
+    if ( !mi_db->agregar("cursos",
+                   "id_curso,anio,tipo,nivel,letra,rut_profesor_jefe,plan,descripcion",
+                   valores) )
+        mi_db->modificar("cursos",
+                         "id_curso='" + id_curso + "'",
+                         "id_curso,anio,tipo,nivel,letra,rut_profesor_jefe,plan,descripcion",
+                         valores);
+
 	cur_anios_cargar();
 	((QSqlRelationalTableModel * )ui->tabla_alumnos->model())->select();
 }
@@ -423,9 +447,9 @@ void CoNotas::importar_Sige()
  ******************************************************************************/
 void CoNotas::asig_cargar_anio()
 {
-	ui->asig_anio->clear();
-	QStringList anios = mi_db->cursos_anios();
-	ui->asig_anio->addItems( anios );
+    QString consulta = "SELECT anio FROM cursos GROUP BY anio";
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
+    ui->asig_anio->setModel( modelo );
 }
 
 /*******************************************************************************
@@ -433,9 +457,11 @@ void CoNotas::asig_cargar_anio()
  ******************************************************************************/
 void CoNotas::asig_cargar_tipo(QString anio)
 {
-	ui->asig_tipo->clear();
-	QStringList tipos = mi_db->cursos_tipos( anio );
-	ui->asig_tipo->addItems( tipos );
+    QString consulta = "SELECT tipo FROM cursos "
+            "WHERE anio=" + anio +
+            " GROUP BY tipo";
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
+    ui->asig_tipo->setModel( modelo );
 }
 
 /*******************************************************************************
@@ -443,10 +469,12 @@ void CoNotas::asig_cargar_tipo(QString anio)
  ******************************************************************************/
 void CoNotas::asig_cargar_nivel( QString tipo)
 {
-	ui->asig_nivel->clear();
-	QStringList niveles = mi_db->cursos_nivel( ui->asig_anio->currentText(),
-											   tipo );
-	ui->asig_nivel->addItems( niveles );
+    QString consulta = "SELECT nivel FROM cursos "
+            " WHERE anio='" + ui->asig_anio->currentText() +
+            "' AND tipo='" + tipo +
+            "' GROUP BY nivel ORDER BY nivel";
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
+    ui->asig_nivel->setModel( modelo );
 }
 
 /*******************************************************************************
@@ -454,11 +482,13 @@ void CoNotas::asig_cargar_nivel( QString tipo)
  ******************************************************************************/
 void CoNotas::asig_cargar_letra(QString nivel)
 {
-	ui->asig_letra->clear();
-	QStringList letras = mi_db->cursos_letras( ui->asig_anio->currentText(),
-											   ui->asig_tipo->currentText(),
-											   nivel );
-	ui->asig_letra->addItems( letras );
+    QString consulta = "SELECT letra FROM cursos "
+            "WHERE anio='" + ui->asig_anio->currentText() +
+            "' AND tipo='" + ui->asig_tipo->currentText() +
+            "' AND nivel='" + nivel +
+            "' GROUP BY letra ORDER BY letra";
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
+    ui->asig_letra->setModel( modelo );
 }
 
 /*******************************************************************************
@@ -534,7 +564,9 @@ void CoNotas::asig_agregar()
 										ui->asig_tipo->currentText(),
 										ui->asig_nivel->currentText(),
 										ui->asig_letra->currentText());
-	mi_db->agregar_asignatura(id_curso, rut_profesor, id_codigo, ponderable);
+    mi_db->agregar("asignaturas",
+                   "id_curso,rut_profesor,id_codigo,ponderable",
+                   "'"+id_curso+"','"+rut_profesor+"','"+id_codigo+"','"+ponderable+"'");
 	((QSqlRelationalTableModel *)ui->tabla_asignaturas->model())->select();
 	asig_cargar_disponibles();
 }
@@ -544,9 +576,14 @@ void CoNotas::asig_agregar()
  ******************************************************************************/
 void CoNotas::asig_alumno_rut_info()
 {
-	ui->datos_docente_asignatura->setText(
-				mi_db->persona_nombrar(
-					ui->asig_rut->text()));
+    QStringList * persona = mi_db->buscar("nombre||' '||apellido_paterno||' '||apellido_materno AS persona",
+                                          "personas",
+                                          "rut='" + ui->asig_rut->text() + "'");
+    if (persona)
+        ui->datos_docente_asignatura->setText( persona->at(0) );
+//	ui->datos_docente_asignatura->setText(
+//				mi_db->persona_nombrar(
+//					ui->asig_rut->text()));
 }
 
 
@@ -564,9 +601,9 @@ void CoNotas::asig_alumno_rut_info()
  ******************************************************************************/
 void CoNotas::prueb_cargar_anio()
 {
-	ui->prueb_anio->clear();
-	QStringList anios = mi_db->cursos_anios();
-	ui->prueb_anio->addItems( anios );
+    QString consulta = "SELECT anio FROM cursos GROUP BY anio";
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
+    ui->prueb_anio->setModel( modelo );
 }
 
 /*******************************************************************************
@@ -574,9 +611,11 @@ void CoNotas::prueb_cargar_anio()
  ******************************************************************************/
 void CoNotas::prueb_cargar_tipo(QString anio)
 {
-	ui->prueb_tipo->clear();
-	QStringList tipos = mi_db->cursos_tipos( anio );
-	ui->prueb_tipo->addItems( tipos );
+    QString consulta = "SELECT tipo FROM cursos "
+            "WHERE anio=" + anio +
+            " GROUP BY tipo";
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
+    ui->prueb_tipo->setModel( modelo );
 }
 
 /*******************************************************************************
@@ -584,10 +623,12 @@ void CoNotas::prueb_cargar_tipo(QString anio)
  ******************************************************************************/
 void CoNotas::prueb_cargar_nivel( QString tipo)
 {
-	ui->prueb_nivel->clear();
-	QStringList niveles = mi_db->cursos_nivel( ui->prueb_anio->currentText(),
-											   tipo );
-	ui->prueb_nivel->addItems( niveles );
+    QString consulta = "SELECT nivel FROM cursos "
+            " WHERE anio='" + ui->prueb_anio->currentText() +
+            "' AND tipo='" + tipo +
+            "' GROUP BY nivel ORDER BY nivel";
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
+    ui->prueb_nivel->setModel( modelo );
 }
 
 /*******************************************************************************
@@ -595,11 +636,14 @@ void CoNotas::prueb_cargar_nivel( QString tipo)
  ******************************************************************************/
 void CoNotas::prueb_cargar_letra(QString nivel)
 {
-	ui->prueb_letra->clear();
-	QStringList letras = mi_db->cursos_letras( ui->prueb_anio->currentText(),
-											   ui->prueb_tipo->currentText(),
-											   nivel );
-	ui->prueb_letra->addItems( letras );
+    QString consulta = "SELECT letra FROM cursos "
+            "WHERE anio='" + ui->prueb_anio->currentText() +
+            "' AND tipo='" + ui->prueb_tipo->currentText() +
+            "' AND nivel='" + nivel +
+            "' GROUP BY letra ORDER BY letra";
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
+    ui->prueb_letra->setModel( modelo );
+
 	prueb_asig_vincular_disponibles();
 }
 
@@ -744,12 +788,14 @@ void CoNotas::inf_parc()
 	report->loadReport(formato);
 	QString curso_id = mi_db->cursos_id(ui->inf_anio->currentText(),
 										ui->inf_tipo->currentText(),
-										ui->inf_nivel->currentText(),
-										ui->inf_letra->currentText());
-	report->recordCount = mi_db->asignaturas_curso( curso_id ).count();
-	QObject::connect(report, SIGNAL(setValue(int&, QString&, QVariant&)),
-					 this, SLOT(inf_parc_campos(int&, QString&, QVariant&)) );
-	report->printExec(&printer);
+                                        ui->inf_nivel->currentText(),
+                                        ui->inf_letra->currentText());
+    report->recordCount = mi_db->buscarColumna("id_asignatura",
+                                               "asignaturas",
+                                               "id_curso='" + curso_id + "'")->count();
+    QObject::connect(report, SIGNAL(setValue(int&, QString&, QVariant&)),
+                     this, SLOT(inf_parc_campos(int&, QString&, QVariant&)) );
+    report->printExec();
 }
 
 /*******************************************************************************
@@ -788,7 +834,12 @@ void CoNotas::inf_parc_campos(int &recNo, QString &paramName, QVariant &paramVal
 	QString rut_alumno=modelo_alumnos->record(ui->inf_alumnos->currentIndex()).value(1).toString();
 	if (paramName == "Alumno")
 	{
-		paramValue = mi_db->persona_nombrar(rut_alumno);
+        QStringList * persona = mi_db->buscar("nombre||' '||apellido_paterno||' '||apellido_materno AS persona",
+                                              "personas",
+                                              "rut='" + ui->rut_profesor_jefe->text() + "'");
+        if (persona)
+            paramValue = persona->at(0);
+//		paramValue = mi_db->persona_nombrar(rut_alumno);
 		return;
 	}
 	// Cabecera
@@ -798,38 +849,52 @@ void CoNotas::inf_parc_campos(int &recNo, QString &paramName, QVariant &paramVal
 										ui->inf_tipo->currentText(),
 										ui->inf_nivel->currentText(),
 										ui->inf_letra->currentText());
-	QStringList asignaturas = mi_db->asignaturas_curso( curso_id );
-	QStringList notas;
+    QStringList asignaturas = *mi_db->buscarColumna("id_asignatura",
+                                                   "asignaturas",
+                                                   "id_curso='" + curso_id + "'");
+    QStringList *notas = new QStringList();
 	QString notaActual = "";
 	int count = 0;
 	float promedio_parcial = 0.0;
 	foreach (QString id_asignatura, asignaturas)
 	{
-		notas = mi_db->notas_asignatura_rut( id_asignatura, rut_alumno );
-		if ( count == recNo )
+        notas->append(*mi_db->buscarColumna(
+                          "notas.nota",
+                          "notas",
+                          "notas.rut_alumno='" +rut_alumno+
+                          "' AND id_prueba IN (SELECT pruebas.id_prueba FROM pruebas "
+                          "WHERE pruebas.id_asignatura='"+id_asignatura+"');"
+                          ));
+        if ( count == recNo && notas )
 		{
 			if ( paramName == "Asignatura" )
 			{
-				paramValue = mi_db->asignatura_desc( id_asignatura );
-				return;
+                paramValue = mi_db->buscar("codigos_asignaturas.subsector",
+                       "codigos_asignaturas,asignaturas ",
+                       "asignaturas.id_asignatura='" +id_asignatura+
+                       "' AND asignaturas.id_codigo=codigos_asignaturas.id;")->at(0);
+                return;
 			}
 			if ( paramName == "PP" )
 			{
-				paramValue = promedio( notas );
+                paramValue = promedio( *notas );
 				return;
 			}
-			for (int i = 0; i < notas.count() && i < 14; i++)
+            for (int i = 0; i < notas->count() && i < 14; i++)
 			{
 				notaActual = "N" + QString::number(i+1);
 				if ( paramName == notaActual )
 				{
-					paramValue = notas.at(i);
+                    paramValue = notas->at(i);
 					return;
 				}
 			}
 		}
-		promedio_parcial += promedio( notas ) / (float)(asignaturas.count()+1);
-		notas.clear();
+        if (notas)
+        {
+            promedio_parcial += promedio( *notas ) / (float)(asignaturas.count()+1);
+            notas->clear();
+        }
 		count ++;
 	}
 
@@ -847,7 +912,11 @@ void CoNotas::inf_parc_campos(int &recNo, QString &paramName, QVariant &paramVal
 	}
 	if ( paramName == "profesor" )
 	{
-		paramValue = mi_db->profesor_curso( curso_id );
+
+        paramValue = mi_db->buscar("nombre||' '||apellido_paterno||' '||apellido_materno",
+                                   "personas,cursos",
+                                   "id_curso='" + curso_id +
+                                   "' AND personas.rut=cursos.rut_profesor_jefe")->at(0);
 		return;
 	}
 }
@@ -884,22 +953,26 @@ void CoNotas::inf_sem()
 		for ( int i = 0; i < ui->inf_alumnos->count(); i++)
 		{
 			report = new QtRPT(this);
-			report->loadReport(formato);
-			report->recordCount = mi_db->asignaturas_curso( curso_id ).count();
-			ui->inf_alumnos->setCurrentIndex( i );
-			QObject::connect(report, SIGNAL(setValue(int&, QString&, QVariant&)),
-							 this, SLOT(inf_sem_campos(int&, QString&, QVariant&)));
-			report->printExec(&printer);
-		}
-	}
+            report->loadReport(formato);
+            report->recordCount = mi_db->buscarColumna("id_asignatura",
+                                                       "asignaturas",
+                                                       "id_curso='" + curso_id + "'")->count();
+            ui->inf_alumnos->setCurrentIndex( i );
+            QObject::connect(report, SIGNAL(setValue(int&, QString&, QVariant&)),
+                             this, SLOT(inf_sem_campos(int&, QString&, QVariant&)));
+            report->printExec(&printer);
+        }
+    }
 	else
 	{
 		report = new QtRPT(this);
-		report->loadReport(formato);
-		report->recordCount = mi_db->asignaturas_curso( curso_id ).count();
-		QObject::connect(report, SIGNAL(setValue(int&, QString&, QVariant&)),
+        report->loadReport(formato);
+        report->recordCount = mi_db->buscarColumna("id_asignatura",
+                                                   "asignaturas",
+                                                   "id_curso='" + curso_id + "'")->count();
+        QObject::connect(report, SIGNAL(setValue(int&, QString&, QVariant&)),
 						 this, SLOT(inf_sem_campos(int&, QString&, QVariant&)));
-		report->printExec(&printer);
+        report->printExec();
 	}
 }
 
@@ -939,7 +1012,12 @@ void CoNotas::inf_sem_campos(int &recNo, QString &paramName, QVariant &paramValu
 	QString rut_alumno=modelo_alumnos->record(ui->inf_alumnos->currentIndex()).value(1).toString();
 	if (paramName == "Alumno")
 	{
-		paramValue = mi_db->persona_nombrar(rut_alumno);
+        QStringList * persona = mi_db->buscar("nombre||' '||apellido_paterno||' '||apellido_materno AS persona",
+                                              "personas",
+                                              "rut='" + rut_alumno + "'");
+        if (persona)
+            paramValue = persona->at(0);
+//		paramValue = mi_db->persona_nombrar(rut_alumno);
 		return;
 	}
 	// Cabecera
@@ -949,19 +1027,31 @@ void CoNotas::inf_sem_campos(int &recNo, QString &paramName, QVariant &paramValu
 										ui->inf_tipo->currentText(),
 										ui->inf_nivel->currentText(),
 										ui->inf_letra->currentText());
-	QStringList asignaturas = mi_db->asignaturas_curso( curso_id );
+
+    QStringList asignaturas = *mi_db->buscarColumna("id_asignatura",
+                                                   "asignaturas",
+                                                   "id_curso='" + curso_id + "'");
 	QStringList notas;
 	QString notaActual = "";
 	int count = 0;
 	float promedio_parcial = 0.0;
 	foreach (QString id_asignatura, asignaturas)
 	{
-		notas = mi_db->notas_asignatura_rut( id_asignatura, rut_alumno );
+        notas = *mi_db->buscarColumna(
+                    "notas.nota",
+                    "notas",
+                    "notas.rut_alumno='" +rut_alumno+
+                    "' AND id_prueba IN (SELECT pruebas.id_prueba FROM pruebas "
+                    "WHERE pruebas.id_asignatura='"+id_asignatura+"');"
+                    );
 		if ( count == recNo )
 		{
 			if ( paramName == "Asignatura" )
 			{
-				paramValue = mi_db->asignatura_desc( id_asignatura );
+                paramValue = mi_db->buscar("codigos_asignaturas.subsector",
+                       "codigos_asignaturas,asignaturas ",
+                       "asignaturas.id_asignatura='" +id_asignatura+
+                       "' AND asignaturas.id_codigo=codigos_asignaturas.id;")->at(0);
 				return;
 			}
 			if ( paramName == "PP" )
@@ -998,7 +1088,10 @@ void CoNotas::inf_sem_campos(int &recNo, QString &paramName, QVariant &paramValu
 	}
 	if ( paramName == "profesor" )
 	{
-		paramValue = mi_db->profesor_curso( curso_id );
+        paramValue = mi_db->buscar("nombre||' '||apellido_paterno||' '||apellido_materno",
+                                   "personas,cursos",
+                                   "id_curso='" + curso_id +
+                                   "' AND personas.rut=cursos.rut_profesor_jefe")->at(0);
 		return;
 	}
 }
@@ -1006,33 +1099,39 @@ void CoNotas::inf_sem_campos(int &recNo, QString &paramName, QVariant &paramValu
 
 void CoNotas::inf_cargar_anio()
 {
-	ui->inf_anio->clear();
-	QStringList anios = mi_db->cursos_anios();
-	ui->inf_anio->addItems( anios );
+    QString consulta = "SELECT anio FROM cursos GROUP BY anio";
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
+    ui->inf_anio->setModel( modelo );
 }
 
 void CoNotas::inf_cargar_tipo(QString anio)
 {
-	ui->inf_tipo->clear();
-	QStringList tipos = mi_db->cursos_tipos( anio );
-	ui->inf_tipo->addItems( tipos );
+    QString consulta = "SELECT tipo FROM cursos "
+            "WHERE anio=" + anio +
+            " GROUP BY tipo";
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
+    ui->inf_tipo->setModel( modelo );
 }
 
 void CoNotas::inf_cargar_nivel( QString tipo)
 {
-	ui->inf_nivel->clear();
-	QStringList niveles = mi_db->cursos_nivel( ui->inf_anio->currentText(),
-											   tipo );
-	ui->inf_nivel->addItems( niveles );
+    QString consulta = "SELECT nivel FROM cursos "
+            " WHERE anio='" + ui->inf_anio->currentText() +
+            "' AND tipo='" + tipo +
+            "' GROUP BY nivel ORDER BY nivel";
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
+    ui->inf_nivel->setModel( modelo );
 }
 
 void CoNotas::inf_cargar_letra(QString nivel)
 {
-	ui->inf_letra->clear();
-	QStringList letras = mi_db->cursos_letras( ui->inf_anio->currentText(),
-											   ui->inf_tipo->currentText(),
-											   nivel );
-	ui->inf_letra->addItems( letras );
+    QString consulta = "SELECT letra FROM cursos "
+            "WHERE anio='" + ui->inf_anio->currentText() +
+            "' AND tipo='" + ui->inf_tipo->currentText() +
+            "' AND nivel='" + nivel +
+            "' GROUP BY letra ORDER BY letra";
+    QSqlQueryModel * modelo = mi_db->modeloConsulta(this, consulta);
+    ui->inf_letra->setModel( modelo );
 }
 
 void CoNotas::inf_cargar_periodo(QString letra)
@@ -1041,17 +1140,23 @@ void CoNotas::inf_cargar_periodo(QString letra)
 	QString curso_id = mi_db->cursos_id(
 				ui->inf_anio->currentText(),
 				ui->inf_tipo->currentText(),
-				ui->inf_nivel->currentText(),
-				letra
-				);
-	QStringList periodos = mi_db->periodo_de_curso( curso_id );
-	ui->inf_periodo->addItems( periodos );
+                ui->inf_nivel->currentText(),
+                letra
+                );
+
+    QStringList periodos = *mi_db->buscarColumna("periodo",
+                                                 "pruebas",
+                                                 "id_asignatura IN (SELECT asignaturas.id_asignatura "
+                                                 "FROM asignaturas "
+                                                 "WHERE asignaturas.id_curso='" + curso_id +
+                                                 "') GROUP BY periodo ORDER BY periodo;");
+    ui->inf_periodo->addItems( periodos );
 }
 
 float CoNotas::promedio(QStringList lista)
 {
-	int contador = 0;
-	if (lista.count()==0)
+    int contador = 0;
+    if (lista.count()==0)
 		return 0.0;
 	float resultado = 0.0;
 	for ( int i= 0; i < lista.count(); i++)

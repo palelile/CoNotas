@@ -10,18 +10,18 @@
 #include <QByteArray>
 #include <QSqlTableModel>
 #include <QSqlRecord>
-#include "db.h"
+#include "dbcolegio.h"
 
 class csv_lector
 {
 private:
     QFile archivo_csv;
 	QSqlTableModel *mi_modelo;
-	db * mi_db;
+    dbColegio * mi_db;
 public:
     csv_lector();
 	bool leer_archivo_modelo(QString nombre_archivo);
-	bool leer_archivo_db(QString nombre_archivo, db *base_datos);
+    bool leer_archivo_db(QString nombre_archivo, dbColegio *base_datos);
 	bool construir_cabecera_modelo(QString linea);
 	bool leer_linea_modelo(QString linea);
 	QString leer_linea_temporal_db(QString linea);

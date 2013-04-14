@@ -15,13 +15,17 @@ SOURCES += main.cpp\
 		csv_lector.cpp \
 		rut.cpp \
 		db.cpp \
-		qtrpt.cpp
+		qtrpt.cpp \
+    dblocal.cpp \
+    dbcolegio.cpp
 
 HEADERS  += conotas.h \
 		csv_lector.h \
 		rut.h \
 		db.h \
-		qtrpt.h
+		qtrpt.h \
+    dblocal.h \
+    dbcolegio.h
 
 FORMS    += conotas.ui
 
